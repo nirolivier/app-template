@@ -15,49 +15,61 @@
  */
 
 
-
 package com.niro.repository;
 
-import java.util.Date;
-
+import com.niro.constants.LoggingCode;
+import com.niro.domain.User;
+import com.niro.domain.UserPersistentRememberMeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.util.Assert;
 
-import com.niro.domain.PersistentToken;
+import java.util.Date;
 
 /**
+ * The remember-me function repository class. It delegates the persistence mechanism to
+ * the {@link SimplePersistentTokenRepository} class.
+ *
  * @author Olivier nirina
+ * @see SimplePersistentTokenRepository
  * @since 1.0
  */
 public class RememberMePersistentTokenRepository implements PersistentTokenRepository {
-    
+    private static final Logger LOG = LoggerFactory.getLogger(RememberMePersistentTokenRepository.class);
 
+    @Autowired
+    private MessageSource  messageSource;
     private SimplePersistentTokenRepository persistentTokenRepository;
-    
+
     @Autowired
     private UserRepository userRepository;
-    
+
     /**
-     * 
+     * Default constructor
      */
     public RememberMePersistentTokenRepository(SimplePersistentTokenRepository persistentTokenRepository) {
         Assert.notNull(persistentTokenRepository, "Persistent token repository must be set.");
         this.persistentTokenRepository = persistentTokenRepository;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
-        PersistentToken persistentToken = new PersistentToken();
-        persistentToken.setSeries(token.getSeries());
-        persistentToken.setTokenValue(token.getTokenValue());
-        persistentToken.setTokenDate(token.getDate());
-        persistentToken.setUser(userRepository.findOneByUsername(token.getUsername()).orElse(null));
-        persistentTokenRepository.save(persistentToken);
+        String message = messageSource.getMessage(LoggingCode.DEB_0006.name(), new Object[]{null}, LocaleContextHolder.getLocale());
+        LOG.debug(message);
+
+        // retrieve user by username;
+        User user = userRepository.findOneByUsername(token.getUsername()).orElse(null);
+
+        // Create a new remember-me token for the user.
+       // FIXME UserPersistentRememberMeToken rememberMeToken = new UserPersistentRememberMeToken(user,token);
     }
 
     /**
@@ -65,8 +77,8 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
      */
     @Override
     public void updateToken(String series, String tokenValue, Date lastUsed) {
-        // TODO Auto-generated method stub
-
+        String message = messageSource.getMessage(LoggingCode.DEB_0007.name(), new Object[]{null}, LocaleContextHolder.getLocale());
+        LOG.debug(message);
     }
 
     /**
@@ -84,7 +96,6 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
     @Override
     public void removeUserTokens(String username) {
         // TODO Auto-generated method stub
-
     }
 
 }

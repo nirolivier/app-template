@@ -15,16 +15,14 @@
  */
 
 
-
 package com.niro.config;
 
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
 
 /**
  * @author Olivier nirina
@@ -33,14 +31,14 @@ import com.mongodb.MongoClient;
 @Configuration
 @EnableMongoRepositories("com.niro.repository")
 @EnableSpringDataWebSupport
-public class DatabaseConfiguration extends AbstractMongoConfiguration{
+public class DatabaseConfiguration extends AbstractMongoConfiguration {
 
     /**
      * {@inheritDoc}
      */
     @Override
     protected String getDatabaseName() {
-        return "app_template";
+        return "appTmpdb";
     }
 
     /**

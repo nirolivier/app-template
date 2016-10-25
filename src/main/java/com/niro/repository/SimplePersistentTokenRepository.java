@@ -20,12 +20,12 @@ package com.niro.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.niro.domain.PersistentToken;
+import com.niro.domain.UserPersistentRememberMeToken;
 
 /**
  * @author Olivier nirina
  * @since 1.0
  */
-public interface SimplePersistentTokenRepository extends MongoRepository<PersistentToken, String> {
+public interface SimplePersistentTokenRepository extends MongoRepository<UserPersistentRememberMeToken, String> {
 
 }

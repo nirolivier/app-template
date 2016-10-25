@@ -36,8 +36,6 @@ public final class CookiesConstant {
      * Angular cross-site request forgery protection.
      */
     public static final String XSRF_TOKEN = "XSRF-TOKEN";
-    
-    
 
     /**
      * the call attempt of this constructor will throw an exception.

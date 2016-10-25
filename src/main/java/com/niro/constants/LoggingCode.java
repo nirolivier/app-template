@@ -30,10 +30,13 @@ public enum LoggingCode {
     DEB_0003,
     DEB_0004,
     DEB_0005,
+    DEB_0006,
+    DEB_0007,
     
     // Error code declaration
     ERR_0001,
 
     // Error code declaration
     INF_0001;
+
 }

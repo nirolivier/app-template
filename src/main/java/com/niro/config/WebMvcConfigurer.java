@@ -38,7 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @since 1.0
  */
 @Configuration
-@ComponentScan(basePackages="com.niro")
+@ComponentScan(basePackages={"com.niro"})
 @EnableWebMvc
 public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     private final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();

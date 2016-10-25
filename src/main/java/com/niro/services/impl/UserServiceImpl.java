@@ -35,11 +35,14 @@ import com.niro.dto.UserDto;
 import com.niro.repository.AuthorityRepository;
 import com.niro.repository.UserRepository;
 import com.niro.services.UserService;
+import org.springframework.stereotype.Service;
 
 /**
+ * An implementation class of {@link UserService user service} interface.
  * @author Olivier nirina
  * @since 1.0
  */
+@Service
 public class UserServiceImpl implements UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 

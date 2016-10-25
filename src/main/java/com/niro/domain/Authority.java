@@ -39,7 +39,7 @@ public class Authority implements Serializable {
     private String value;
     
     /**
-     * Default constructor
+     * Default constructor.
      */
     public Authority() {
     }
