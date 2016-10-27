@@ -65,6 +65,9 @@ public class User implements Serializable {
     @DBRef
     private Set<Authority> authorities = new HashSet<Authority>();
 
+    public User() {
+    }
+
     /**
      * Returns the id of this user.
      *

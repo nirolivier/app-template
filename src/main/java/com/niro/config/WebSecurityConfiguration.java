@@ -29,6 +29,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -62,6 +63,7 @@ import com.niro.repository.SimplePersistentTokenRepository;
  */
 @Configuration
 @EnableWebSecurity
+@ComponentScan(basePackages = "com.niro")
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true,jsr250Enabled=true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -162,18 +164,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .rememberMe()
             .rememberMeParameter("remember-me")
-            .rememberMeServices(persistentTokenBasedRememberMeServices());
-            
+            .tokenRepository(rememberMePersistentTokenRepository());
     }
-    
+
+    /**
+     * Remember-me persistent token repository bean
+     * @return
+     */
     @Bean
     public RememberMePersistentTokenRepository rememberMePersistentTokenRepository(){
         return new RememberMePersistentTokenRepository(persistentTokenRepository);
-    }
-    
-    @Bean
-    public PersistentTokenBasedRememberMeServices persistentTokenBasedRememberMeServices(){
-        return new PersistentTokenBasedRememberMeServices(RandomStringUtils.random(30), userDetailsService, rememberMePersistentTokenRepository());
     }
     
     /**

@@ -47,7 +47,7 @@ public interface UserService {
      * @param resetKey the reset key.
      * @return An empty optional if no result was found
      */
-    Optional<UserDto> findOneByResetKey(String resetKey);
+    Optional<UserDto> findOneByPasswordResetKey(String resetKey);
 
     /**
      * Find an user by his email.

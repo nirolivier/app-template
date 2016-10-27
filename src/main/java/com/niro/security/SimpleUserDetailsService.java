@@ -31,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.niro.domain.User;
@@ -42,7 +43,7 @@ import com.niro.repository.UserRepository;
  * @author Olivier nirina
  * @since 1.0
  */
-@Component
+@Service
 public class SimpleUserDetailsService implements UserDetailsService {
     
     private static final Logger LOG = LoggerFactory.getLogger(SimpleUserDetailsService.class);

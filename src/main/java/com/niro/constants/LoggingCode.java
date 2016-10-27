@@ -35,6 +35,7 @@ public enum LoggingCode {
     
     // Error code declaration
     ERR_0001,
+    ERR_0002,
 
     // Error code declaration
     INF_0001;

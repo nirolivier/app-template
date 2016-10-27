@@ -21,6 +21,10 @@ package com.niro.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.niro.domain.UserPersistentRememberMeToken;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 /**
  * @author Olivier nirina
@@ -28,4 +32,18 @@ import com.niro.domain.UserPersistentRememberMeToken;
  */
 public interface SimplePersistentTokenRepository extends MongoRepository<UserPersistentRememberMeToken, String> {
 
+    /**
+     * Retrieves the token by series.
+     * @param series the series
+     * @return the token related to the series.
+     */
+    Optional<UserPersistentRememberMeToken> findOneBySeries(String series);
+
+    /**
+     * Retrieves the token of the given username.
+     * @return a token
+     */
+    Optional<UserPersistentRememberMeToken> findOneByUserUsername(String username);
+
+    void deleteByUserUsername(String username);
 }

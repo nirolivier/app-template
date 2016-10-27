@@ -36,54 +36,62 @@ import java.util.Date;
 @Document(collection = "T_PERSISTENT_TOKENS")
 public class UserPersistentRememberMeToken implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final int MAX_USER_AGENT_LEN = 255;
 
     @Id
     private String id;
-    private final String series;
-    private final String tokenValue;
-    private final Date date;
-    private final String ipAddress;
-    private final String userAgent;
+    private String series;
+    private String tokenValue;
+    private Date date;
 
     @JsonIgnore
     @DBRef
-    private final User user;
+    private User user;
 
-    /**
-     * Constructs an object of this class base on the fields in parameter.
-     * @param user the logged user
-     * @param ipAddress the ip address the user is logging.
-     * @param userAgent the user agent
-     * @param series the token series
-     * @param tokenValue the token value
-     * @param date the user remember date
-     */
-    public UserPersistentRememberMeToken(User user, String ipAddress, String userAgent, String series, String tokenValue, Date date) {
-        this.user = user;
-        this.series = series;
-        this.tokenValue = tokenValue;
-        this.date = date;
-        this.ipAddress = ipAddress;
+    public UserPersistentRememberMeToken() {
+    }
 
-        if (userAgent != null && userAgent.length() >= MAX_USER_AGENT_LEN) {
-            this.userAgent = userAgent.substring(0, MAX_USER_AGENT_LEN - 1);
-        } else {
-            this.userAgent = userAgent;
-        }
+    public User getUser() {
+        return user;
     }
 
     /**
-     * This method constructs an object based on {@link PersistentRememberMeToken} object,
-     * the user, ip address and the user agent.
-     * @param user the logged user
-     * @param ipAddress the ip address the user is logging.
-     * @param userAgent the user agent
-     * @param token the provided remember token object
-     * @see UserPersistentRememberMeToken contructor.
+     * Sets a new persistent token id.
+     * @param id the id of the token
      */
-    public UserPersistentRememberMeToken(User user, String ipAddress, String userAgent, PersistentRememberMeToken token) {
-        this(user, ipAddress, userAgent, token.getSeries(), token.getTokenValue(), token.getDate());
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * Sets a new persistent token eries
+     * @param series the series to set
+     */
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    /**
+     * Sets a new persistent token value.
+     * @param tokenValue the token value
+     */
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
+    }
+
+    /**
+     * Sets the data of the persistent token.
+     * @param date
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
+     * Sets the user of this token.
+     * @param user the user to set
+     */
+    public void setUser(User user) {
+        this.user = user;
     }
 
     /**
@@ -119,22 +127,5 @@ public class UserPersistentRememberMeToken implements Serializable {
     public Date getDate() {
         return date;
     }
-
-    /**
-     * Retrieves the ip address of the machine the flag was set.
-     * @return an ip address
-     */
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    /**
-     * Retrieves the user agent.
-     * @return the user agent.
-     */
-    public String getUserAgent() {
-        return userAgent;
-    }
-
 
 }

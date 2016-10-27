@@ -35,6 +35,7 @@ import com.niro.dto.UserDto;
 import com.niro.repository.AuthorityRepository;
 import com.niro.repository.UserRepository;
 import com.niro.services.UserService;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,7 +43,7 @@ import org.springframework.stereotype.Service;
  * @author Olivier nirina
  * @since 1.0
  */
-@Service
+@Component
 public class UserServiceImpl implements UserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -93,11 +94,11 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public Optional<UserDto> findOneByResetKey(String resetKey) {
+    public Optional<UserDto> findOneByPasswordResetKey(String resetKey) {
         String message = messageSource.getMessage(LoggingCode.DEB_0002.name(), new String[] { resetKey },
                 LocaleContextHolder.getLocale());
         LOG.debug(message);
-        return userRepository.findOneByResetKey(resetKey).map(user -> new UserDto(user));
+        return userRepository.findOneByPasswordResetKey(resetKey).map(user -> new UserDto(user));
     }
 
     /**

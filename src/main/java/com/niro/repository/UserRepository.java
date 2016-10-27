@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.niro.domain.User;
+import org.springframework.stereotype.Repository;
 
 /**
  * This interface represents the user repository.
@@ -43,7 +44,7 @@ public interface UserRepository extends MongoRepository<User, String>{
      * @param resetKey the reset key.
      * @return An empty optional if no result was found
      */
-    Optional<User> findOneByResetKey(String resetKey);
+    Optional<User> findOneByPasswordResetKey(String resetKey);
 
     /**
      * Find an user by his email.

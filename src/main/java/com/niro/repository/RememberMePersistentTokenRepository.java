@@ -20,6 +20,7 @@ package com.niro.repository;
 import com.niro.constants.LoggingCode;
 import com.niro.domain.User;
 import com.niro.domain.UserPersistentRememberMeToken;
+import com.niro.exceptions.DataNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,13 +64,17 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
         String message = messageSource.getMessage(LoggingCode.DEB_0006.name(), new Object[]{null}, LocaleContextHolder.getLocale());
+        String userNotFoundMsg = messageSource.getMessage(LoggingCode.ERR_0002.name(), new String[]{token.getUsername()}, LocaleContextHolder.getLocale());
         LOG.debug(message);
-
-        // retrieve user by username;
-        User user = userRepository.findOneByUsername(token.getUsername()).orElse(null);
+        User user = userRepository.findOneByUsername(token.getUsername()).orElseThrow(() -> new DataNotFoundException(userNotFoundMsg));
 
         // Create a new remember-me token for the user.
-       // FIXME UserPersistentRememberMeToken rememberMeToken = new UserPersistentRememberMeToken(user,token);
+        UserPersistentRememberMeToken newToken = new UserPersistentRememberMeToken();
+        newToken.setUser(user);
+        newToken.setTokenValue(token.getTokenValue());
+        newToken.setSeries(token.getSeries());
+        newToken.setDate(token.getDate());
+        persistentTokenRepository.save(newToken);
     }
 
     /**
@@ -79,6 +84,13 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
     public void updateToken(String series, String tokenValue, Date lastUsed) {
         String message = messageSource.getMessage(LoggingCode.DEB_0007.name(), new Object[]{null}, LocaleContextHolder.getLocale());
         LOG.debug(message);
+        UserPersistentRememberMeToken existingToken = persistentTokenRepository.findOneBySeries(series).orElseThrow(() ->
+            new DataNotFoundException("Token with series " + series + " was not found."));
+
+        existingToken.setTokenValue(tokenValue);
+        existingToken.setSeries(series);
+        existingToken.setDate(lastUsed);
+        persistentTokenRepository.save(existingToken);
     }
 
     /**
@@ -86,8 +98,9 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
      */
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
-        // TODO Auto-generated method stub
-        return null;
+        UserPersistentRememberMeToken existingToken = persistentTokenRepository.findOneBySeries(seriesId).orElseThrow(() -> new DataNotFoundException());
+        return new PersistentRememberMeToken(existingToken.getUser().getUsername(),
+                existingToken.getSeries(),existingToken.getTokenValue(),existingToken.getDate());
     }
 
     /**
@@ -95,7 +108,7 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
      */
     @Override
     public void removeUserTokens(String username) {
-        // TODO Auto-generated method stub
+        persistentTokenRepository.deleteByUserUsername(username);
     }
 
 }

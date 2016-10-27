@@ -19,19 +19,30 @@ package com.niro.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.authentication.UserCredentials;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.core.MongoClientFactoryBean;
+import org.springframework.data.mongodb.core.MongoFactoryBean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+
+import java.util.Set;
 
 /**
  * @author Olivier nirina
  * @since 1.0
  */
 @Configuration
-@EnableMongoRepositories("com.niro.repository")
+@EnableMongoRepositories(basePackages = "com.niro.repository")
 @EnableSpringDataWebSupport
 public class DatabaseConfiguration extends AbstractMongoConfiguration {
+
+    @Autowired private Mongo mongo;
 
     /**
      * {@inheritDoc}
@@ -46,7 +57,22 @@ public class DatabaseConfiguration extends AbstractMongoConfiguration {
      */
     @Override
     public Mongo mongo() throws Exception {
-        return new MongoClient();
+        return mongo;
     }
+
+    @Bean public MongoClientFactoryBean mongoClient(){
+        MongoClientFactoryBean mongoClient = new MongoClientFactoryBean();
+        mongoClient.setHost("localhost");
+       // MongoCredential mongoCredential = MongoCredential.createCredential("admin", "appTmpdb", "admin".toCharArray());
+        //mongoClient.setCredentials(new MongoCredential[]{mongoCredential});
+        return mongoClient;
+    }
+
+
+    @Override
+    protected String getMappingBasePackage() {
+        return "com.niro.domain";
+    }
+
 
 }
