@@ -18,13 +18,12 @@
 
 package com.niro.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import com.niro.domain.User;
 import com.niro.domain.UserPersistentRememberMeToken;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 /**
  * @author Olivier nirina
@@ -43,7 +42,7 @@ public interface SimplePersistentTokenRepository extends MongoRepository<UserPer
      * Retrieves the token of the given username.
      * @return a token
      */
-    Optional<UserPersistentRememberMeToken> findOneByUserUsername(String username);
+    Optional<UserPersistentRememberMeToken> findOneByUser(User user);
 
-    void deleteByUserUsername(String username);
+    void deleteByUser(User user);
 }

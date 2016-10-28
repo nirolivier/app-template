@@ -25,12 +25,12 @@ import static com.niro.constants.UrlConstant.PWD_VALIDATE;
 import static com.niro.constants.UrlConstant.SIGN_IN;
 import static com.niro.constants.UrlConstant.SIGN_UP;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -46,7 +46,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 
 import com.niro.constants.AuthorityConstant;
 import com.niro.constants.CookiesConstant;
@@ -65,6 +64,7 @@ import com.niro.repository.SimplePersistentTokenRepository;
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.niro")
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true,jsr250Enabled=true)
+@Import(I18nI10nConfiguration.class)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -171,7 +171,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Remember-me persistent token repository bean
      * @return
      */
-    @Bean
+    @Bean(name="rememberMePersistentTokenRepository")
     public RememberMePersistentTokenRepository rememberMePersistentTokenRepository(){
         return new RememberMePersistentTokenRepository(persistentTokenRepository);
     }

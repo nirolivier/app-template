@@ -16,35 +16,25 @@
 
 package com.niro.test.repository;
 
-import com.niro.config.DatabaseConfiguration;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.niro.domain.Authority;
 import com.niro.domain.User;
 import com.niro.repository.AuthorityRepository;
 import com.niro.repository.UserRepository;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * An user repository test class.
  * @author Olivier nirina
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DatabaseConfiguration.class}, loader = AnnotationConfigContextLoader.class)
-@Rollback
-public class UserRepositoryTest {
+public class UserRepositoryTest extends AbstractRepositoryTest{
 
     private @Autowired
     UserRepository userRepository;

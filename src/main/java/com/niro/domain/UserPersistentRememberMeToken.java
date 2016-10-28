@@ -15,15 +15,16 @@
  */
 package com.niro.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * This class holds the information about the remember-me functionality.

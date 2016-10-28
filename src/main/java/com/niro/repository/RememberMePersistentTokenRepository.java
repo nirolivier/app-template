@@ -17,10 +17,8 @@
 
 package com.niro.repository;
 
-import com.niro.constants.LoggingCode;
-import com.niro.domain.User;
-import com.niro.domain.UserPersistentRememberMeToken;
-import com.niro.exceptions.DataNotFoundException;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.util.Date;
+import com.niro.constants.LoggingCode;
+import com.niro.domain.User;
+import com.niro.domain.UserPersistentRememberMeToken;
+import com.niro.exceptions.DataNotFoundException;
 
 /**
  * The remember-me function repository class. It delegates the persistence mechanism to
@@ -40,6 +42,7 @@ import java.util.Date;
  * @see SimplePersistentTokenRepository
  * @since 1.0
  */
+@Repository
 public class RememberMePersistentTokenRepository implements PersistentTokenRepository {
     private static final Logger LOG = LoggerFactory.getLogger(RememberMePersistentTokenRepository.class);
 
@@ -108,7 +111,7 @@ public class RememberMePersistentTokenRepository implements PersistentTokenRepos
      */
     @Override
     public void removeUserTokens(String username) {
-        persistentTokenRepository.deleteByUserUsername(username);
+        userRepository.findOneByUsername(username).ifPresent(user -> {persistentTokenRepository.deleteByUser(user);});
     }
 
 }

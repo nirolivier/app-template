@@ -17,21 +17,17 @@
 
 package com.niro.config;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.authentication.UserCredentials;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoClientFactoryBean;
-import org.springframework.data.mongodb.core.MongoFactoryBean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
-import java.util.Set;
+import com.mongodb.Mongo;
 
 /**
  * @author Olivier nirina
@@ -40,6 +36,8 @@ import java.util.Set;
 @Configuration
 @EnableMongoRepositories(basePackages = "com.niro.repository")
 @EnableSpringDataWebSupport
+@ComponentScan(basePackages={"com.niro.repository"})
+@Import(I18nI10nConfiguration.class)
 public class DatabaseConfiguration extends AbstractMongoConfiguration {
 
     @Autowired private Mongo mongo;
@@ -73,6 +71,5 @@ public class DatabaseConfiguration extends AbstractMongoConfiguration {
     protected String getMappingBasePackage() {
         return "com.niro.domain";
     }
-
 
 }
