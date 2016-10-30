@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,12 +61,29 @@ public class User implements Serializable {
     private String langKey;
     private String activationKey;
     private String passwordResetKey;
+    private ZonedDateTime passwordResetDate;
 
     @JsonIgnore
     @DBRef
-    private Set<Authority> authorities = new HashSet<Authority>();
+    private Set<Authority> authorities = new HashSet<>();
 
     public User() {
+    }
+
+    /**
+     * Retrieves the password reset date.
+     * @return a date
+     */
+    public ZonedDateTime getPasswordResetDate() {
+        return passwordResetDate;
+    }
+
+    /**
+     * Mark the password reset date.
+     * @param passwordResetDate a date
+     */
+    public void setPasswordResetDate(ZonedDateTime passwordResetDate) {
+        this.passwordResetDate = passwordResetDate;
     }
 
     /**

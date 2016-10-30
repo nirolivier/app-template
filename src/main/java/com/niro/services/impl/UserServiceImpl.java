@@ -16,11 +16,15 @@
 
 package com.niro.services.impl;
 
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import com.niro.utils.RandomUtils;
+import com.niro.utils.UserUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,7 @@ import com.niro.dto.UserDto;
 import com.niro.repository.AuthorityRepository;
 import com.niro.repository.UserRepository;
 import com.niro.services.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * {@inheritDoc}
@@ -118,7 +126,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserDto> findOneByUsername(String username) {
         String message = messageSource.getMessage(LoggingCode.DEB_0004.name(), new String[] { username },
-                LocaleContextHolder.getLocale());
+                LocaleContextHolder.getLocaleContext().getLocale());
         LOG.debug(message);
         return userRepository.findOneByUsername(username).map(user -> new UserDto(user));
     }
@@ -132,6 +140,62 @@ public class UserServiceImpl implements UserService {
                 LocaleContextHolder.getLocale());
         LOG.debug(message);
         return userRepository.findOneById(userId).map(user -> new UserDto(user));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<UserDto> activateAccount(String activationkey) {
+        return userRepository.findOneByActivationKey(activationkey)
+                .map(user -> {
+                    user.setActivated(true);
+                    user.setActivationKey(null);
+                    return userRepository.save(user);
+                })
+                .map(user -> new UserDto(user));
+
+    }
+
+    /**
+     *  {@inheritDoc}
+     */
+    @Override
+    public Optional<UserDto> updatePassword(String newPassword) {
+        return userRepository.findOneByUsername(UserUtils.getCurrentUserName())
+                .map(user -> {
+                    user.setPassword(passwordEncoder.encode(newPassword));
+                    return userRepository.save(user);
+                })
+                .map(user -> new UserDto(user));
+    }
+
+    /**
+     *  {@inheritDoc}
+     */
+    @Override
+    public Optional<UserDto> validateResetPassword(String newPassword, String resetPasswordKey) {
+        return userRepository.findOneByPasswordResetKey(resetPasswordKey)
+                .map(user -> {
+                    user.setPasswordResetDate(null);
+                    user.setPasswordResetKey(null);
+                    user.setPassword(newPassword);
+                    return userRepository.save(user);
+                })
+                .map(user -> new UserDto(user));
+    }
+
+    /**
+     *  {@inheritDoc}
+     */
+    @Override
+    public Optional<UserDto> resetPassword(String email) {
+        return userRepository.findOneByEmail(email)
+                .map(user -> {
+                    user.setPasswordResetKey(RandomUtils.generatePasswordResetKey());
+                    user.setPasswordResetDate(ZonedDateTime.now());
+                    return userRepository.save(user);
+                }).map(user -> new UserDto(user));
     }
 
 }

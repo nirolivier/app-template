@@ -27,49 +27,59 @@ import com.niro.exceptions.IllegalCallException;
 public final class UrlConstant {
     
     /**
-     * URL that is used to point to the root path. The value of this constant is {@value}
+     * URL that is used to point to the root path. The value of this constant is {@value}.
      */
     public static final String ROOT = "/";
     
     /**
-     * URL used to point to the API path. The value of this constant is {@value}
+     * URL used to point to the API path. The value of this constant is {@value}.
      */
     public static final String API = "/api";
     
     /**
-     * URL that is used to login. The value of this constant is {@value}
+     * URL that is used to login. The value of this constant is {@value}.
      */
     public static final String SIGN_IN = "/signin";
     
     /**
-     * URL that is used to process the authentication. The value of this constant is {@value}
+     * URL that is used to process the authentication. The value of this constant is {@value}.
      */
     public static final String AUTH = "/auth";
     
     /**
-     * URL that is used to sign up. The value of this constant is {@value}
+     * URL that is used to sign up. The value of this constant is {@value}.
      */
     public static final String SIGN_UP = "/signup";
     
     /**
-     * URL that is used to point to the account root path. The value of this constant is {@value}
+     * URL that is used to point to the account root path. The value of this constant is {@value}.
      */
     public static final String ACCOUNT = "/account";
+
+    /**
+     * URL that is used to activate the user account. The value of this constant is {@value}.
+     */
+    public static final String ACTIVATE = "/activate";
+
+    /**
+     * URL that is used to change the user password. The value of this constant is {@value}.
+     */
+    public static final String PWD_UPDATE = "/update_password";
     
     /**
-     * URL that is used to view user profile. The value of this constant is {@value}
+     * URL that is used to view user profile. The value of this constant is {@value}.
      */
     public static final String PROFILE = "/viewprofile";
     
     /**
-     * URL that is used to reset password. The value of this constant is {@value}
+     * URL that is used to reset password. The value of this constant is {@value}.
      */
-    public static final String PWD_RESET = "/pwdreset/init";
+    public static final String PWD_RESET_INIT = "/pwdreset/init";
     
     /**
-     * URL that is used to validate password reset. The value of this constant is {@value}
+     * URL that is used to validate password reset. The value of this constant is {@value}.
      */
-    public static final String PWD_VALIDATE = "/pwdreset/validate";
+    public static final String PWD_RESET_VALIDATE = "/pwdreset/validate";
 
     /**
      * URL that is used to access the administrator root path. The value of this constant is {@value}
@@ -77,7 +87,7 @@ public final class UrlConstant {
     public static final String ADMIN = "/adm";
     
     /**
-     * URL that is used to logout. The value of this constant is {@value}
+     * URL that is used to logout. The value of this constant is {@value}.
      */
     public static final String LOGOUT = "/api/logout";
 

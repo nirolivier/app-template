@@ -55,8 +55,10 @@ public class UserDto {
     private boolean activated;
 
     private Set<String> authorities;
-    
-    
+
+    public UserDto() {
+    }
+
     /**
      * Create a new UserDto based on the {@link User} object.
      */

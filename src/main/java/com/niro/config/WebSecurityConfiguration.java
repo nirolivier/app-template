@@ -16,15 +16,6 @@
 
 package com.niro.config;
 
-import static com.niro.constants.UrlConstant.ACCOUNT;
-import static com.niro.constants.UrlConstant.ADMIN;
-import static com.niro.constants.UrlConstant.API;
-import static com.niro.constants.UrlConstant.PROFILE;
-import static com.niro.constants.UrlConstant.PWD_RESET;
-import static com.niro.constants.UrlConstant.PWD_VALIDATE;
-import static com.niro.constants.UrlConstant.SIGN_IN;
-import static com.niro.constants.UrlConstant.SIGN_UP;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +44,8 @@ import com.niro.constants.I18nConstant;
 import com.niro.constants.UrlConstant;
 import com.niro.repository.RememberMePersistentTokenRepository;
 import com.niro.repository.SimplePersistentTokenRepository;
+
+import static com.niro.constants.UrlConstant.*;
 
 /**
  * This class represents the security configuration.
@@ -128,43 +121,44 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf()
+                .csrf()
         .and()
-            .authorizeRequests()
-            .antMatchers(API + SIGN_IN).permitAll()
-            .antMatchers(API + SIGN_UP).permitAll()
-            .antMatchers(API + ACCOUNT + PWD_RESET).permitAll()
-            .antMatchers(API + ACCOUNT + PWD_VALIDATE).permitAll()
-            .antMatchers(API + ACCOUNT + PROFILE).permitAll()
-            .antMatchers(API + "/**").authenticated()
-            .antMatchers(ADMIN + "/**").hasAuthority(AuthorityConstant.ADMIN)
-            .anyRequest().authenticated()
+                .authorizeRequests()
+                .antMatchers(API + AUTH).permitAll()
+                .antMatchers(API + SIGN_UP).permitAll()
+                .antMatchers(API + ACCOUNT + ACTIVATE).permitAll()
+                .antMatchers(API + ACCOUNT + PWD_RESET_INIT).permitAll()
+                .antMatchers(API + ACCOUNT + PWD_RESET_VALIDATE).permitAll()
+                .antMatchers(API + ACCOUNT + PROFILE).permitAll()
+                .antMatchers(API + "/**").authenticated()
+                .antMatchers(ADMIN + "/**").hasAuthority(AuthorityConstant.ADMIN)
+                .anyRequest().authenticated()
         .and()
-            .logout()
-            .logoutUrl(UrlConstant.LOGOUT)
-            .logoutSuccessHandler(logoutSuccessHandler)
-            .deleteCookies(CookiesConstant.XSRF_TOKEN, CookiesConstant.SESSION_ID)
-            .permitAll()
+                .logout()
+                .logoutUrl(LOGOUT)
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .deleteCookies(CookiesConstant.XSRF_TOKEN, CookiesConstant.SESSION_ID)
+                .permitAll()
         .and()
-            .formLogin()
-            .loginProcessingUrl(UrlConstant.AUTH)
-            .successHandler(authenticationSuccessHandler)
-            .failureHandler(authenticationFailureHandler)
-            .usernameParameter("username")
-            .passwordParameter("password")
-            .permitAll()
+                .formLogin()
+                .loginProcessingUrl(API + SIGN_IN)
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .permitAll()
         .and()
-            .headers()
-            .frameOptions()
-            .disable()
+                .headers()
+                .frameOptions()
+                .disable()
         .and()
-            .exceptionHandling()
-            .accessDeniedHandler(accessDeniedHandler)
-            .authenticationEntryPoint(authenticationEntryPoint)
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPoint)
         .and()
-            .rememberMe()
-            .rememberMeParameter("remember-me")
-            .tokenRepository(rememberMePersistentTokenRepository());
+                .rememberMe()
+                .rememberMeParameter("remember-me")
+                .tokenRepository(rememberMePersistentTokenRepository());
     }
 
     /**

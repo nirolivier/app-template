@@ -16,21 +16,19 @@
 
 package com.niro.web.rest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.niro.services.UserService;
+import com.niro.web.models.UserModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.niro.constants.UrlConstant;
-import com.niro.services.UserService;
-import com.niro.web.models.UserModel;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
+import static com.niro.constants.UrlConstant.*;
 
 /**
  * This class provides methods for user account. To manage the user refer to the
@@ -41,7 +39,7 @@ import com.niro.web.models.UserModel;
  * @see UserRestController
  */
 @RestController
-@RequestMapping(value = UrlConstant.API)
+@RequestMapping(value = API)
 public class UserAccountRestController {
 
     @Autowired
@@ -56,7 +54,7 @@ public class UserAccountRestController {
      *            the user model
      * @return the registration status
      */
-    @RequestMapping(value = UrlConstant.SIGN_UP, method = RequestMethod.POST, produces = {
+    @RequestMapping(value = SIGN_UP, method = RequestMethod.POST, produces = {
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> signup(HttpServletRequest request, @Valid @RequestBody UserModel model) {
         return userService.findOneByUsername(model.getUsername())
@@ -69,6 +67,55 @@ public class UserAccountRestController {
                             return new ResponseEntity<>(HttpStatus.CREATED);
                         }));
 
+    }
+
+
+    /**
+     * Activate an account using the activation key. The key can be retrieved from the URL with the parameter <code>actKey.</code>
+     * @param activationkey the activation key. If an error occurs, the status 500 is returned. Otherwise, a status 200 is returned.
+     * @return a status of the request.
+     */
+    @RequestMapping(value = ACCOUNT + ACTIVATE, method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> activateAccount(@RequestParam(value = "actkey") String activationkey){
+        return userService.activateAccount(activationkey)
+                .map(userDto -> new ResponseEntity<String>(HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+    }
+
+    @RequestMapping(value = ACCOUNT + PWD_UPDATE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> updatePassword(@RequestBody String newPassword){
+        if(StringUtils.isNotEmpty(newPassword)){
+            return userService.updatePassword(newPassword)
+                    .map(userDto -> new ResponseEntity<String>(HttpStatus.OK))
+                    .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = ACCOUNT + PWD_RESET_INIT, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public  ResponseEntity<?> resetPassword(@RequestBody String email, HttpServletRequest request){
+        return userService.resetPassword(email)
+                .map(userDto -> new ResponseEntity<String>(HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+    @RequestMapping(value = ACCOUNT + PWD_RESET_VALIDATE, method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<?> validateResetPassword(@RequestBody String newPassword, @RequestBody String resetPasswordKey){
+
+        if(StringUtils.isNotEmpty(resetPasswordKey) && StringUtils.isNotEmpty(newPassword)) {
+            return userService.validateResetPassword(newPassword, resetPasswordKey)
+                    .map(userDto -> new ResponseEntity<String>(HttpStatus.OK))
+                    .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @RequestMapping(value = AUTH, method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+    public String isAuthenticated(HttpServletRequest request){
+        return request.getRemoteUser();
     }
 
 }

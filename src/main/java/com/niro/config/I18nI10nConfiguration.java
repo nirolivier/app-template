@@ -25,7 +25,7 @@ public class I18nI10nConfiguration {
     @Bean
     public MessageSource messageSource(){
         ReloadableResourceBundleMessageSource  bundleMessageSource = new ReloadableResourceBundleMessageSource();
-        bundleMessageSource.setBasenames("com/niro/i18n/logging","com/niro/i18n/message");
+        bundleMessageSource.setBasenames("classpath:com/niro/i18n/logging","classpath:com/niro/i18n/message");
         return bundleMessageSource;
     }
     

@@ -13,17 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.niro.utils;
 
-package com.niro.test.web.rest;
-
-import org.springframework.test.web.servlet.MockMvc;
+import com.niro.exceptions.IllegalCallException;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
- * User rest test class.
  * @author Olivier nirina
  * @since 1.0
  */
-public class UserRestTest extends AbstractRestTest {
+public final class RandomUtils {
 
-    private MockMvc mockMvc;
+    private static  final int KEY_LENGTH = 30;
+
+    private RandomUtils(){
+        throw new IllegalCallException("Cannot invoke the constructor of this class.");
+    }
+
+    /**
+     * Generates the password reset key. The key has a length of 30.
+     * @return a key
+     */
+    public static String generatePasswordResetKey(){
+        return RandomStringUtils.randomNumeric(KEY_LENGTH);
+    }
 }

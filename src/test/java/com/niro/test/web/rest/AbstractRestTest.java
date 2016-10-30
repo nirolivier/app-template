@@ -15,21 +15,25 @@
  */
 package com.niro.test.web.rest;
 
+import com.niro.config.*;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import com.niro.config.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * This class represents the parent test class for rest service.
  * @author Olivier nirina
  * @since 1.0
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebMvcConfigurer.class}, loader = AnnotationConfigContextLoader.class)
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = WebMvcConfigurer.class)
+@ComponentScan(basePackages = "com.niro")
 @WebAppConfiguration
 public abstract class AbstractRestTest {
 

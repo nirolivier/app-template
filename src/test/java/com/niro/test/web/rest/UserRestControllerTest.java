@@ -14,29 +14,16 @@
  * limitations under the License.
  */
 
-package com.niro.web.models;
+package com.niro.test.web.rest;
 
-import java.util.Set;
-
-import com.niro.domain.User;
-import com.niro.dto.UserDto;
+import org.springframework.test.web.servlet.MockMvc;
 
 /**
+ * User rest test class.
  * @author Olivier nirina
  * @since 1.0
  */
-public class UserModel extends UserDto {
+public class UserRestControllerTest extends AbstractRestTest {
 
-    public UserModel() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public UserModel(String username, String password, String firstName, String lastName, String email, String langKey,
-            boolean activated, Set<String> authorities) {
-        super(username, password, firstName, lastName, email, langKey, activated, authorities);
-    }
-
-
+    private MockMvc mockMvc;
 }

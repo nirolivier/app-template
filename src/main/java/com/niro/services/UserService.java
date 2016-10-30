@@ -23,7 +23,7 @@ import java.util.Optional;
 import com.niro.dto.UserDto;
 
 /**
- * An interface that defines user method.
+ * An interface that defines user services method.
  * @author Olivier nirina
  * @since 1.0
  */
@@ -69,4 +69,33 @@ public interface UserService {
      * @return An empty optional if no result was found
      */
     Optional<UserDto> findOneById(String userId);
+
+    /**
+     * Activates the user account having the specified unique key.
+     * @param activationkey the user activation key
+     * @return the activated user.
+     */
+    Optional<UserDto> activateAccount(String activationkey);
+
+    /**
+     * Update the user password.
+     * @param newPassword the new password
+     * @return the updated user with new password.
+     */
+    Optional<UserDto> updatePassword(String newPassword);
+
+    /**
+     * Resets the password of the user having the email address.
+     * @param email the user email address
+     * @return the user with reset password.
+     */
+    Optional<UserDto> resetPassword(String email);
+
+    /**
+     * Validates the reset password. Set the reset key and reset date to null.
+     * @param newPassword the new password
+     * @param resetPasswordKey the reset key
+     * @return
+     */
+    Optional<UserDto> validateResetPassword(String newPassword, String resetPasswordKey);
 }

@@ -1,0 +1,18 @@
+/**
+ * Copyright (c) 2016 Olivier nirina.
+ *
+ * @author Olivier nirina
+ * @since 1.0
+ */
+
+'use strict';
+
+module.exports = {
+    webapp: 'src/main/webapp',
+    www: 'target/www',
+    bower: 'src/main/webapp/bower_components',
+    test: 'src/test/javascript',
+    all_js: 'src/main/webapp/app/**/*.js',
+    to_del: ['target/www'],
+    jsExt:'js'
+}
