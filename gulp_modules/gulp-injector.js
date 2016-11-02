@@ -34,9 +34,9 @@ module.exports = {
  * @returns {*}
  */
 function app() {
-    return $gulp.src($const.webapp + '/index.html')
+    $gulp.src($const.webapp + '/index.html')
         .pipe($plumberNotifier())
-        .pipe($inject($gulp.src($const.all_js)
+        .pipe($inject($gulp.src($const.distJs)
             .pipe($naturalSort())
             .pipe($ngFilesort()),{
                 name: 'app',
@@ -54,7 +54,7 @@ function app() {
  * @returns {*}
  */
 function vendor() {
-    return $gulp.src($const.webapp + '/index.html')
+    $gulp.src($const.webapp + '/index.html')
         .pipe($plumberNotifier())
         .pipe($inject($gulp.src($bowerFile(),{read: false}), {
             name: 'bower',

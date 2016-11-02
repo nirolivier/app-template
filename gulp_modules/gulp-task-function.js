@@ -18,7 +18,8 @@ var $gulp            = require('gulp'),
     $prefix          = require('gulp-autoprefixer'),
     $concat          = require('gulp-concat'),
     $sourcemaps      = require('gulp-sourcemaps'),
-    $tsc              = require('gulp-typescript'),
+    $tsc             = require('gulp-typescript'),
+    $inject          = require('gulp-inject'),
         
     $bowerFile 	     = require('main-bower-files'),
     $del             = require('del'),
@@ -32,15 +33,41 @@ var tsProject = $tsc.createProject($const.tsConfig);
 module.exports = {
     clean: cleanFn,
     cleanTsc: cleanTsc,
+    cleanInject: cleanInject,
     tsc:tsc,
     esLint:esLint,
-    esLintFix:esLintFix
+    esLintFix:esLintFix,
+    cleanVendor:cleanVendor
 
+}
+
+function cleanInject(){
+    return function(){
+        $gulp.src($const.webapp + '/index.html')
+            .pipe($plumberNotifier())
+            .pipe($inject($gulp.src('',{read:false}),{
+                    name: 'app',
+                    empty: true,
+                    relative:true
+                }))
+            .pipe($inject($gulp.src('',{read:false}),{
+                    name: 'bower',
+                    empty: true,
+                    relative:true
+                }))
+            .pipe($gulp.dest($const.webapp));
+    }
+}
+
+function cleanVendor(){
+    return function(){
+         $del([$const.bower]);
+    }
 }
 
 function esLint(){
    return function(){
-       return $gulp.src([$const.all_js])
+       $gulp.src([$const.all_js])
         .pipe($plumberNotifier())
         .pipe($eslint())
         .pipe($eslint.format())
@@ -50,7 +77,7 @@ function esLint(){
 
 function esLintFix(){
     return function(){
-        return $gulp.src([$const.all_js])
+        $gulp.src([$const.all_js])
         .pipe($plumberNotifier())
         .pipe($eslint({
             fix: true
@@ -65,7 +92,7 @@ function esLintFix(){
  */
 function cleanFn(patterns){
     return function(){
-        return $del(patterns).then(function(succes){
+        $del(patterns).then(function(succes){
             console.log('Deleted files and folder\n', succes.join('\n'));
         }, function(err){
             console.log('Error while deleting files and folder\n', err.join('\n'));
@@ -80,7 +107,7 @@ function tsc(){
                 .pipe($plumberNotifier())
                 .pipe($sourcemaps.init())                                
                 .pipe(tsProject())
-                .pipe($sourcemaps.write())
+                .pipe($sourcemaps.write('.'))
                 .pipe($gulp.dest($const.webapp + '/dist'));
     }
 }

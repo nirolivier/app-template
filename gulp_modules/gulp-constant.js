@@ -12,7 +12,7 @@ module.exports = {
     www: 'target/www',
     bower: 'src/main/webapp/bower_components',
     test: 'src/test/javascript',
-    all_js: 'src/main/webapp/app/**/*.js',
+    distJs: 'src/main/webapp/dist/**/*.js',
     to_del: ['target/www'],
     jsExt:'js',
     allTs:'src/main/webapp/**/*.ts',

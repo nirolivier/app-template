@@ -18,6 +18,8 @@ var $gulp            = require('gulp'),
 
 $gulp.task('clean', $taskFunction.clean($const.to_del));
 $gulp.task('clean:tsc', $taskFunction.cleanTsc());
+$gulp.task('clean:vendor', $taskFunction.cleanVendor());
+$gulp.task('clean:inject', $taskFunction.cleanInject());
 $gulp.task('tsc', $taskFunction.tsc());
 $gulp.task('inject:app', $injector.app);
 $gulp.task('inject:vendor', $injector.vendor);
