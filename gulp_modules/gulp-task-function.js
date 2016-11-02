@@ -7,15 +7,57 @@
 
 'use strict';
 
-var $gulp      = require('gulp'),
-    $del       = require('de'),
-    $injector  = require('./gulp_modules/gulp-injector'),
-    $const     = require('./gulp_modules/gulp-constant');
+var $gulp            = require('gulp'),
+    $changed         = require('gulp-changed'),
+    $less	         = require('gulp-less'),
+    $jshint	         = require('gulp-jshint'),
+    $eslint	         = require('gulp-eslint'),
+    $plumberNotifier = require('gulp-plumber-notifier'),
+    $gulpIf          = require('gulp-if'),
+    $esLintFix       = require('gulp-eslint-if-fixed'),
+    $prefix          = require('gulp-autoprefixer'),
+    $concat          = require('gulp-concat'),
+    $sourcemaps      = require('gulp-sourcemaps'),
+    $tsc              = require('gulp-typescript'),
+        
+    $bowerFile 	     = require('main-bower-files'),
+    $del             = require('del'),
+    $browserSync     = require('browser-sync'),
+
+    $injector  = require('./gulp-injector'),
+    $const     = require('./gulp-constant');
+
+var tsProject = $tsc.createProject($const.tsConfig);
 
 module.exports = {
     clean: cleanFn,
-    injectDev: injectDevFn,
-    injectProd: injectProdFn
+    cleanTsc: cleanTsc,
+    tsc:tsc,
+    esLint:esLint,
+    esLintFix:esLintFix
+
+}
+
+function esLint(){
+   return function(){
+       return $gulp.src([$const.all_js])
+        .pipe($plumberNotifier())
+        .pipe($eslint())
+        .pipe($eslint.format())
+        .pipe($eslint.failOnError())
+   }
+}
+
+function esLintFix(){
+    return function(){
+        return $gulp.src([$const.all_js])
+        .pipe($plumberNotifier())
+        .pipe($eslint({
+            fix: true
+        }))
+        .pipe($eslint.format())
+        .pipe($esLintFix($const.webapp))
+    }
 }
 
 /**
@@ -31,18 +73,20 @@ function cleanFn(patterns){
     }
 }
 
-function injectDevFn(ext){
+function tsc(){
     return function(){
-       if(ext && ext === 'js'){
-          $injector.jsDev();
-       }
+        var allTs = $const.allTs;    
+       $gulp.src([$const.webapp + '{,/!(bower_components)}/*.ts'])
+                .pipe($plumberNotifier())
+                .pipe($sourcemaps.init())                                
+                .pipe(tsProject())
+                .pipe($sourcemaps.write())
+                .pipe($gulp.dest($const.webapp + '/dist'));
     }
 }
 
-function injectProdFn(ext){
-    return function(){
-        if(ext && ext === 'js'){
-            $injector.jsProd();
-        }
+function cleanTsc(){
+    return  function(){
+        $del([$const.webapp + '/dist']);      
     }
 }

@@ -14,5 +14,7 @@ module.exports = {
     test: 'src/test/javascript',
     all_js: 'src/main/webapp/app/**/*.js',
     to_del: ['target/www'],
-    jsExt:'js'
+    jsExt:'js',
+    allTs:'src/main/webapp/**/*.ts',
+    tsConfig:'tsconfig.json'
 }

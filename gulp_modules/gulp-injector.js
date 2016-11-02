@@ -15,13 +15,13 @@ var $gulp               =   require('gulp'),
     $naturalSort        =   require('gulp-natural-sort'),
     $ngFilesort         =   require('gulp-angular-filesort'),
     $bowerFile 	        =   require('main-bower-files'),
-    $const              =   require('./gulp_modules/gulp-constant');
+    $const              =   require('./gulp-constant');
 
 /// custom node module exportation
 
 module.exports = {
-    jsDev:   jsDevFn,
-    jsProd:  jsProdFn
+    app:   app,
+    vendor:  vendor
 }
 
 /// Function declaration
@@ -29,15 +29,19 @@ module.exports = {
  * <b>Development mode:</b><br>
  * Inject all javascript files within the root of the web application
  * in the index.html. The location of the injection is denoted by tags:
- * <br> starttag: <!--inject:js--> and endtag: <!--endinject-->.
+ * <br> starttag: <!--app:js--> and endtag: <!--endapp-->.
  * <br> Those tags are default for module <code>gulp-inject</code>
  * @returns {*}
  */
-function jsDevFn() {
-    return $gulp.src($const.webapp + 'index.html')
+function app() {
+    return $gulp.src($const.webapp + '/index.html')
+        .pipe($plumberNotifier())
         .pipe($inject($gulp.src($const.all_js)
             .pipe($naturalSort())
-            .pipe($ngFilesort()), {relative:true}))
+            .pipe($ngFilesort()),{
+                name: 'app',
+                relative:true
+            }))
         .pipe($gulp.dest($const.webapp));
 }
 
@@ -49,11 +53,11 @@ function jsDevFn() {
  * <br> Those tags are default for module <code>gulp-inject</code>
  * @returns {*}
  */
-function jsProdFn() {
-    return $gulp.src($const.webapp + 'index.html')
+function vendor() {
+    return $gulp.src($const.webapp + '/index.html')
         .pipe($plumberNotifier())
-        .pipe($inject($gulp.src($bowerFile()), {read: false}, {
-            name: 'prod',
+        .pipe($inject($gulp.src($bowerFile(),{read: false}), {
+            name: 'bower',
             relative:true
         }))
         .pipe($gulp.dest($const.webapp));

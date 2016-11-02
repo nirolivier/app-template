@@ -1,0 +1,31 @@
+{
+  "name": "app-template",
+  "description": "Template project",
+  "main": "",
+  "authors": [
+    "Olivier nirina"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "angular"
+  ],
+  "homepage": "https://github.com/nirolivier/app-template",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "zone": "^0.6.25",
+    "core": "core-js#*",
+    "Reflection.js": "^1.2.0",
+    "system.js": "^0.19.40"
+  },
+  "overrides":{
+    "zone": {
+      "main": ["dist/zone.min.js"]
+    }
+  }  
+}
